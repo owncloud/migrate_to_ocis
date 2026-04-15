@@ -2,7 +2,7 @@
 
 namespace OCA\MigrateToInfiniteScale\Helper;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use OCP\IDBConnection;
 
@@ -36,11 +36,7 @@ class Storage {
 			// only storages of users (exclude external storage)
 			// we cannot just check for "files" path in filecache as external storages
 			// can have such folder mounted
-			// NOTE: phpstan might show an error in the line below due to different casing
-			// of the MySQLPlatform. This happens because OC10 uses dbal2 (MySqlPlatform) and
-			// OC11 uses dbal3 (MySQLPlatform). This is harmless and it will go away when we
-			// drop support for OC10
-			if ($this->connection->getDatabasePlatform() instanceof MySQLPlatform) { // @phpstan-ignore-line
+			if ($this->connection->getDatabasePlatform() instanceof MySqlPlatform) {
 				$qb->andWhere("(`st`.`id` LIKE CONCAT('%::', `mt`.`user_id`) or `st`.`id` LIKE CONCAT('object::user:', `mt`.`user_id`))");
 			} else {
 				$qb->andWhere("(`st`.`id` LIKE '%::' || `mt`.`user_id` or `st`.`id` LIKE 'object::user:' || `mt`.`user_id`)");

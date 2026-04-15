@@ -19,7 +19,7 @@ concurrency:
 
 env:
   APP_NAME: migrate_to_ocis
-  PHP_VERSIONS: '["7.4", "8.3"]'
+  PHP_VERSIONS: '["7.4"]'
 
 jobs:
   get-vars:
