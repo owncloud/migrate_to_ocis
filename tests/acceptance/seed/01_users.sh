@@ -2,7 +2,9 @@
 # Create OC10 users from fixtures/users.csv (idempotent).
 #  - active users get logged in once (authenticated PROPFIND) to set last_login,
 #    otherwise the migration would skip their files/shares.
-#  - the disabled user is created then disabled (must NOT migrate).
+#  - the disabled user (login=yes) is logged in WHILE STILL ENABLED, then
+#    disabled -> exercises the "previously active but now disabled" path (must
+#    NOT migrate), distinct from the never-logged-in user.
 #  - the never-logged-in user is left without a login (files/shares skipped).
 set -euo pipefail
 ACCEPTANCE_DIR="${ACCEPTANCE_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
@@ -33,18 +35,25 @@ while IFS=, read -r uid pw email enabled login <&3; do
   # Ensure the email is set even if the user pre-existed.
   occ user:modify "$uid" email "$email" >/dev/null
 
+  # Log the user in BEFORE applying the final enabled state. The login event
+  # sets last_login, which the migration uses to decide whether to migrate a
+  # user's files/shares. A disabled account cannot authenticate, so for the
+  # disabled-but-previously-active user (dave: enabled=no, login=yes) the login
+  # MUST happen while the account is still enabled -- otherwise the PROPFIND
+  # fails silently and dave collapses into the never-logged-in case.
+  if [ "$login" = "yes" ]; then
+    occ user:enable "$uid" >/dev/null            # ensure enabled so login succeeds (also on re-runs)
+    log "logging in user $uid (sets last_login)"
+    # Authenticated DAV request triggers a login event -> last_login is set.
+    in_oc10 curl -sS -u "$uid:$pw" -X PROPFIND \
+      "$OC10_DAV/$uid/" -H 'Depth: 0' -o /dev/null
+  fi
+
   if [ "$enabled" = "no" ]; then
     log "disabling user $uid"
     occ user:disable "$uid" >/dev/null
   else
     occ user:enable "$uid" >/dev/null
-  fi
-
-  if [ "$login" = "yes" ]; then
-    log "logging in user $uid (sets last_login)"
-    # Authenticated DAV request triggers a login event -> last_login is set.
-    in_oc10 curl -sS -u "$uid:$pw" -X PROPFIND \
-      "$OC10_DAV/$uid/" -H 'Depth: 0' -o /dev/null
   fi
 done 3< fixtures/users.csv
 
