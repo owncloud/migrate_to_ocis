@@ -3,8 +3,8 @@
 This file provides context for AI coding agents (Claude Code, GitHub Copilot, Cursor, etc.) working in this repository.
 
 ## Repository Overview
-- **Product family:** Classic (OC10) — migration tooling
-- **Purpose:** ownCloud app that migrates users, groups, files and shares from ownCloud 10 (OC10) to ownCloud Infinite Scale (oCIS).
+- **Product family:** ownCloud Classic — migration tooling
+- **Purpose:** ownCloud app that migrates users, groups, files and shares from ownCloud Classic to ownCloud Infinite Scale (oCIS).
 - **Primary language:** PHP (>= 7.4)
 - **Build system:** Composer, Make
 - **Test framework:** PHPUnit (unit), Docker-based end-to-end acceptance tests
@@ -20,7 +20,7 @@ This file provides context for AI coding agents (Claude Code, GitHub Copilot, Cu
   - `lib/ConflictLog/` - conflict logging
 - `bin/rclone_linux_amd64` - bundled rclone binary used for file migration
 - `tests/unit/` - PHPUnit unit tests
-- `tests/acceptance/` - Docker-based end-to-end tests (OC10 + oCIS)
+- `tests/acceptance/` - Docker-based end-to-end tests (ownCloud Classic + oCIS)
 - `composer.json` - PHP dependencies and app metadata
 - `phpstan.neon` - PHPStan configuration
 - `.php-cs-fixer.dist.php` - php-cs-fixer (ownCloud code style) configuration
@@ -50,7 +50,7 @@ make test-php-style-fix
 make test-php-phpstan
 make test-php-phan
 
-# End-to-end acceptance tests (Docker: OC10 + oCIS)
+# End-to-end acceptance tests (Docker: ownCloud Classic + oCIS)
 make test-acceptance
 ```
 
