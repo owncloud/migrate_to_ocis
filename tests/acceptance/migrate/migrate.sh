@@ -6,7 +6,6 @@
 # the disabled / never-logged-in users) are BY DESIGN non-fatal and must not be
 # treated as failures.
 set -euo pipefail
-set -o pipefail
 ACCEPTANCE_DIR="${ACCEPTANCE_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "$ACCEPTANCE_DIR"
 source lib/common.sh

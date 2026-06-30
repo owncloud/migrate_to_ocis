@@ -91,5 +91,6 @@ while IFS=, read -r owner pw path stype recipient perms expire password <&3; do
          esac
        fi
        ;;
+    *) fail "unknown shareType '$stype' for $label (fixture error?)" ;;
   esac
 done 3< fixtures/shares.csv

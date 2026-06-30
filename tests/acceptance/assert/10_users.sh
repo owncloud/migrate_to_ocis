@@ -3,6 +3,10 @@
 # (sourced by assert.sh; helpers/state come from common.sh + lib_ocis.sh)
 
 users_json=$(graph "v1.0/users")
+# Sanity floor: an empty/short response means the Graph call failed (token blip,
+# outage). Without this the per-row loop below would emit zero assertions and the
+# run would still report PASS. At minimum admin + the migrated users must exist.
+require_count "$users_json" '.value // []' 2 "users"
 
 user_present() { echo "$users_json" | jq -e --arg u "$1" '.value[]? | select(.onPremisesSamAccountName==$u)' >/dev/null 2>&1; }
 user_mail() { echo "$users_json" | jq -r --arg u "$1" '.value[]? | select(.onPremisesSamAccountName==$u) | .mail' | head -n1; }

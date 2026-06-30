@@ -16,6 +16,20 @@ fail() { FAIL_COUNT=$((FAIL_COUNT+1)); _record "FAIL: $*"; }
 
 # ok <description> <command...>  -> pass if command succeeds
 ok()      { if "$@" >/dev/null 2>&1; then pass "$DESC"; else fail "$DESC"; fi; }
+
+# require_count <json> <jq-array-path> <min> <what>
+# Hard-fail the whole run if a bulk Graph response is empty/short. Guards against
+# a token/API outage silently producing zero assertions (which would otherwise
+# leave the overall run reporting PASS). Runs under the orchestrator's `set -e`,
+# so `exit 1` aborts assert.sh entirely.
+require_count() {
+  local json="$1" path="$2" min="$3" what="$4" n
+  n=$(printf '%s' "$json" | jq -r "($path) | length" 2>/dev/null || echo 0)
+  if [ "${n:-0}" -lt "$min" ]; then
+    err "sanity check: expected >= $min $what from oCIS Graph, got ${n:-0} (API/token outage?)"
+    exit 1
+  fi
+}
 # assert_true <bool-expr-result> : pass/fail based on $1 == "true"
 assert_true()  { [ "$1" = "true" ]  && pass "$2" || fail "$2 (got: $1)"; }
 assert_false() { [ "$1" = "false" ] && pass "$2" || fail "$2 (got: $1)"; }
