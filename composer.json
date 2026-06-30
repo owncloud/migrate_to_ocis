@@ -26,7 +26,7 @@
       "bin-links": false
     }
   },
-  "license": "AGPL",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Thomas Müller",

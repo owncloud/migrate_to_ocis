@@ -1,5 +1,9 @@
 # migrate-to-ocis
 
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource)
+
+An ownCloud app that migrates users, groups, files and shares from ownCloud 10 (OC10) to [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis).
+
 # Migration overview
 
 The OC10 to oCIS migration will migrate users, groups, files and shares during several migration steps that will need to be executed in order.
@@ -191,7 +195,7 @@ You can use the following vars as template:
 ```
 OCIS_LDAP_INSECURE: "true"
 
-OCIS_LDAP_URI: ldap://10.0.2.27:14141
+OCIS_LDAP_URI: ldap://ldap.server.prv:389
 OCIS_LDAP_BIND_DN: "cn=admin,dc=owncloudqa,dc=com"
 OCIS_LDAP_BIND_PASSWORD: owncloud123
 
@@ -238,3 +242,19 @@ Both user and group migration will be skipped because the users and groups will 
 Taking this into account, only LDAP users (and manually "migrated" users) will have their files and shares migrated.
 
 Note that assigning a role to the users is still mandatory despite skipping the user migration.
+
+# Contributing
+
+We welcome contributions! Please read the [Contributing Guidelines](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
+
+# Support
+
+For support options, see [SUPPORT.md](SUPPORT.md).
+
+# Security
+
+**Do not open a public GitHub issue for security vulnerabilities.** See [SECURITY.md](SECURITY.md) for how to report them responsibly.
+
+# License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
