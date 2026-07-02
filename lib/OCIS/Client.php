@@ -568,7 +568,7 @@ class Client {
 
 	/**
 	 * Get the oCIS file info for the target path.
-	 * The path refers to a ownCloud Classic path that must have been migrated
+	 * The path refers to an ownCloud Classic path that must have been migrated
 	 *
 	 * @param \Sabre\DAV\Client $davClient a SabreDav client as returned by
 	 * the "getWebdavClientForDrive" method

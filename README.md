@@ -54,14 +54,14 @@ An app token must be created for the oCIS admin user using the auth-app app. Bot
 ### `migrate:to-ocis:init`
 
 ```
-occ migrate:to-ocis:init -k ocis.server.prv
+occ migrate:to-ocis:init -k ocis.example.com
 ```
 
-Initialize the migration to the "ocis.server.prv" oCIS instance.
+Initialize the migration to the "ocis.example.com" oCIS instance.
 
 The `-k` option will cause all the connections during the migration to ignore the SSL certificate of the oCIS instance (if you trust the server and don't want to deal with SSL certificates).
 
-The `-f` option will reset the migration process. Note that this won't do anything to the target oCIS instance ("ocis.server.prv" in this case) and you should ensure that the target oCIS instance is fresh. If the oCIS instance contains data you need to use a different one.
+The `-f` option will reset the migration process. Note that this won't do anything to the target oCIS instance ("ocis.example.com" in this case) and you should ensure that the target oCIS instance is fresh. If the oCIS instance contains data you need to use a different one.
 
 The `--skip` option will be ignored.
 
@@ -193,17 +193,18 @@ Verify the following env vars to ensure they're correct:
 
 You can use the following vars as template:
 ```
-OCIS_LDAP_INSECURE: "true"
+# "true" disables LDAP TLS certificate verification. Never use in production.
+OCIS_LDAP_INSECURE: "false"
 
-OCIS_LDAP_URI: ldap://ldap.server.prv:389
-OCIS_LDAP_BIND_DN: "cn=admin,dc=owncloudqa,dc=com"
-OCIS_LDAP_BIND_PASSWORD: owncloud123
+OCIS_LDAP_URI: ldap://ldap.example.com:389
+OCIS_LDAP_BIND_DN: "cn=admin,dc=example,dc=com"
+OCIS_LDAP_BIND_PASSWORD: "${LDAP_BIND_PASSWORD}"
 
-OCIS_LDAP_GROUP_BASE_DN: "ou=groups,dc=owncloudqa,dc=com"
+OCIS_LDAP_GROUP_BASE_DN: "ou=groups,dc=example,dc=com"
 OCIS_LDAP_GROUP_FILTER: "(objectclass=groupOfNames)"
 OCIS_LDAP_GROUP_OBJECTCLASS: "groupOfNames"
 
-OCIS_LDAP_USER_BASE_DN: "ou=people,dc=owncloudqa,dc=com"
+OCIS_LDAP_USER_BASE_DN: "ou=people,dc=example,dc=com"
 OCIS_LDAP_USER_FILTER: "(objectclass=inetOrgPerson)"
 OCIS_LDAP_USER_OBJECTCLASS: "inetOrgPerson"
 
@@ -212,7 +213,7 @@ IDP_LDAP_LOGIN_ATTRIBUTE: "uid"
 
 OCIS_LDAP_GROUP_SCHEMA_ID: "entryUUID"
 OCIS_LDAP_USER_SCHEMA_ID: "entryUUID"
-OCIS_ADMIN_USER_ID: "a73c6ea6-6e7c-103f-8110-dd19ecb0bb36"
+OCIS_ADMIN_USER_ID: "<admin-user-entryUUID>"
 ```
 
 Using the default values for the rest of the LDAP related vars should be fine, although you might need to double check. If possible use the `OCIS_LDAP_*` variants so the changes are applied to all the related services.
@@ -229,7 +230,7 @@ An app token must be created for the oCIS admin user using the auth-app app. Bot
 The migration steps, in general, will be the same as with the regular migration, although some steps will be skipped. Check the regular migration for details on each step.
 
 ```
-occ migrate:to-ocis:init -k ocis.server.prv
+occ migrate:to-ocis:init -k ocis.example.com
 occ migrate:to-ocis:verify
 occ migrate:to-ocis:migrate:users --skip admin
 occ migrate:to-ocis:assign-role admin

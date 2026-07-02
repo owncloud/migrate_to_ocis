@@ -40,7 +40,7 @@ class UserGroupFinder {
 	}
 
 	/**
-	 * Add a ownCloud Classic user with the corresponding oCIS user id to the cache.
+	 * Add an ownCloud Classic user with the corresponding oCIS user id to the cache.
 	 * This is intended to be used during oCIS user creation, when we
 	 * already have the ownCloud Classic user and we get the oCIS user id as part of
 	 * the creation of the oCIS user.
@@ -50,7 +50,7 @@ class UserGroupFinder {
 	}
 
 	/**
-	 * Add a ownCloud Classic group with the corresponding oCIS group id to the cache.
+	 * Add an ownCloud Classic group with the corresponding oCIS group id to the cache.
 	 * This is intended to be used during oCIS group creation, when we
 	 * already have the ownCloud Classic group and we get the oCIS group id as part of
 	 * the creation of the oCIS group.

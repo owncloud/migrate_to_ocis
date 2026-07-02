@@ -28,7 +28,7 @@ This file provides context for AI coding agents (Claude Code, GitHub Copilot, Cu
 
 ## Development Conventions
 - **Branching:** master
-- **Commit messages:** DCO sign-off required (`git commit -s`). Must follow [Conventional Commits](https://www.conventionalcommits.org/) format (enforced by CI).
+- **Commit messages:** DCO sign-off required (`git commit -s`). Must follow [Conventional Commits](https://www.conventionalcommits.org/) format (PR titles are checked by CI).
 - **Code style:** php-cs-fixer with the ownCloud coding standard.
 - **PR process:** Open a PR against master. All CI checks must pass.
 
@@ -67,7 +67,7 @@ make test-acceptance
 
 ### GitHub Actions
 - **Only** use actions owned by `owncloud`, created by GitHub (`actions/*`), verified on the GitHub Marketplace, or verified by the ownCloud Maintainers.
-- Pin all actions to their full commit SHA (not tags): `uses: actions/checkout@<SHA> # vX.Y.Z`
+- Pin third-party actions to their full commit SHA (not tags): `uses: actions/checkout@<SHA> # vX.Y.Z`. ownCloud's own reusable workflows (`owncloud/reusable-workflows`) may track `@main`.
 - Never introduce actions from unverified third parties.
 
 ### Dependency Management
@@ -76,7 +76,7 @@ make test-acceptance
 
 ### Git Workflow
 - **Rebase policy**: Always rebase; never create merge commits. Use `git pull --rebase` and `git rebase` before pushing.
-- **Signed commits**: All commits **must** be PGP/GPG signed (`git commit -S -s`).
+- **Signed commits**: All commits **must** be signed, using either GPG or SSH (`git commit -S -s`).
 - **DCO sign-off**: Every commit needs a `Signed-off-by` line (`git commit -s`).
 - **Conventional Commits**: Use the [Conventional Commits](https://www.conventionalcommits.org/) format. A reusable GitHub Actions workflow enforces this on commit messages and PR titles.
 
