@@ -28,7 +28,7 @@ This file provides context for AI coding agents (Claude Code, GitHub Copilot, Cu
 
 ## Development Conventions
 - **Branching:** master
-- **Commit messages:** DCO sign-off required (`git commit -s`). Must follow [Conventional Commits](https://www.conventionalcommits.org/) format (PR titles are checked by CI).
+- **Commit messages:** Must follow [Conventional Commits](https://www.conventionalcommits.org/) format (PR titles are checked by CI). Commits must be DCO signed-off — see the Git Workflow section below.
 - **Code style:** php-cs-fixer with the ownCloud coding standard.
 - **PR process:** Open a PR against master. All CI checks must pass.
 
@@ -77,7 +77,7 @@ make test-acceptance
 ### Git Workflow
 - **Rebase policy**: Always rebase; never create merge commits. Use `git pull --rebase` and `git rebase` before pushing.
 - **Signed commits**: All commits **must** be signed, using either GPG or SSH (`git commit -S -s`).
-- **DCO sign-off**: Every commit needs a `Signed-off-by` line (`git commit -s`).
+- **DCO sign-off**: Every commit needs a `Signed-off-by` line (`git commit -s`). This is enforced by the DCO check on pull requests — PRs cannot merge until all commits are signed off. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 - **Conventional Commits**: Use the [Conventional Commits](https://www.conventionalcommits.org/) format. A reusable GitHub Actions workflow enforces this on commit messages and PR titles.
 
 ## Context for AI Agents
