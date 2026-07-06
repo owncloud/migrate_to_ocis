@@ -40,10 +40,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				return ['id' => 'ocis_2G'];
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					return ['id' => 'ocis_2G'];
 			}
 		});
 		$client->expects($this->exactly(3))->method('addMemberToGroup');
@@ -56,10 +56,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return 'ocisUser_01';
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return 'ocisUser_01';
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(2))->method('addGroupToCache');
@@ -100,10 +100,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				return ['id' => 'ocis_2G'];
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					return ['id' => 'ocis_2G'];
 			}
 		});
 		$client->expects($this->exactly(3))->method('addMemberToGroup');
@@ -116,10 +116,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return 'ocisUser_01';
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return 'ocisUser_01';
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(2))->method('addGroupToCache');
@@ -159,13 +159,13 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				$response = $this->createMock(IResponse::class);
-				$response->method('getStatusCode')->willReturn(409);
-				$response->method('getBody')->willReturn('error body response');
-				throw new ClientException('group exists', 'createGroup', $response);
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					$response = $this->createMock(IResponse::class);
+					$response->method('getStatusCode')->willReturn(409);
+					$response->method('getBody')->willReturn('error body response');
+					throw new ClientException('group exists', 'createGroup', $response);
 			}
 		});
 		$client->expects($this->once())->method('checkGroup')->willReturn(['id' => 'ocis_2G']);
@@ -179,10 +179,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return 'ocisUser_01';
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return 'ocisUser_01';
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(2))->method('addGroupToCache');
@@ -224,13 +224,13 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				$response = $this->createMock(IResponse::class);
-				$response->method('getStatusCode')->willReturn(500);
-				$response->method('getBody')->willReturn('error body response');
-				throw new ClientException('group exists', 'createGroup', $response);
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					$response = $this->createMock(IResponse::class);
+					$response->method('getStatusCode')->willReturn(500);
+					$response->method('getBody')->willReturn('error body response');
+					throw new ClientException('group exists', 'createGroup', $response);
 			}
 		});
 		$client->expects($this->never())->method('checkGroup');
@@ -244,10 +244,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return 'ocisUser_01';
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return 'ocisUser_01';
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(1))->method('addGroupToCache');
@@ -285,10 +285,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				return ['id' => 'ocis_2G'];
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					return ['id' => 'ocis_2G'];
 			}
 		});
 		$client->expects($this->exactly(1))->method('addMemberToGroup');
@@ -301,10 +301,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return null;
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return null;
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(2))->method('addGroupToCache');
@@ -346,10 +346,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 		$client->method('tokenExchange')->willReturn('tok0011kot');
 		$client->expects($this->exactly(2))->method('createGroup')->willReturnCallback(function ($admin, $token, $group) {
 			switch ($group->getDisplayName()) {
-			case "GG11":
-				return ['id' => 'ocis_1G'];
-			case "GG22":
-				return ['id' => 'ocis_2G'];
+				case "GG11":
+					return ['id' => 'ocis_1G'];
+				case "GG22":
+					return ['id' => 'ocis_2G'];
 			}
 		});
 		$client->expects($this->exactly(3))->method('addMemberToGroup')->willReturnCallback(function ($admin, $token, $groupId, $userId) {
@@ -369,10 +369,10 @@ class StateMigrateGroupsTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($admin, $token, $user) {
 				switch ($user->getUserName()) {
-				case "user001":
-					return 'ocisUser_01';
-				case "user002":
-					return 'ocisUser_02';
+					case "user001":
+						return 'ocisUser_01';
+					case "user002":
+						return 'ocisUser_02';
 				}
 			});
 		$this->userGroupFinder->expects($this->exactly(1))->method('addGroupToCache');

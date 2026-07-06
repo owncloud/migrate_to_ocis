@@ -44,12 +44,12 @@ class StateMigrateUsersTest extends \Test\TestCase {
 		$client->method('createUser')->willReturnCallback(function ($admin, $token, IUser $user) {
 			// we only need to return the user id for now.
 			switch ($user->getUserName()) {
-			case "user001":
-				return ['id' => 'id_user001'];
-			case "user002":
-				return ['id' => 'id_user002'];
-			case "user003":
-				return ['id' => 'id_user003'];
+				case "user001":
+					return ['id' => 'id_user001'];
+				case "user002":
+					return ['id' => 'id_user002'];
+				case "user003":
+					return ['id' => 'id_user003'];
 			}
 		});
 		$this->ocisClientService->method('newOCISClient')->willReturn($client);
@@ -117,12 +117,12 @@ class StateMigrateUsersTest extends \Test\TestCase {
 		$client->method('createUser')->willReturnCallback(function ($admin, $token, IUser $user) {
 			// we only need to return the user id for now.
 			switch ($user->getUserName()) {
-			case "user001":
-				return ['id' => 'id_user001'];
-			case "user002":
-				return ['id' => 'id_user002'];
-			case "user003":
-				return ['id' => 'id_user003'];
+				case "user001":
+					return ['id' => 'id_user001'];
+				case "user002":
+					return ['id' => 'id_user002'];
+				case "user003":
+					return ['id' => 'id_user003'];
 			}
 		});
 		$this->ocisClientService->method('newOCISClient')->willReturn($client);
@@ -221,12 +221,12 @@ class StateMigrateUsersTest extends \Test\TestCase {
 		$client->method('createUser')->willReturnCallback(function ($admin, $token, IUser $user) {
 			// we only need to return the user id for now.
 			switch ($user->getUserName()) {
-			case "user001":
-				return ['id' => 'id_user001'];
-			case "user002":
-				return ['id' => 'id_user002'];
-			case "user003":
-				return ['id' => 'id_user003'];
+				case "user001":
+					return ['id' => 'id_user001'];
+				case "user002":
+					return ['id' => 'id_user002'];
+				case "user003":
+					return ['id' => 'id_user003'];
 			}
 		});
 		$this->ocisClientService->method('newOCISClient')->willReturn($client);
@@ -297,15 +297,15 @@ class StateMigrateUsersTest extends \Test\TestCase {
 		$client->method('createUser')->willReturnCallback(function ($admin, $token, IUser $user) {
 			// we only need to return the user id for now.
 			switch ($user->getUserName()) {
-			case "user001":
-				return ['id' => 'id_user001'];
-			case "user002":
-				$response = $this->createMock(IResponse::class);
-				$response->method('getStatusCode')->willReturn(409);
-				$response->method('getBody')->willReturn('{"error": {"message": "Already exists"}}');
-				throw new ClientException('exception in client', 'createUser', $response);
-			case "user003":
-				return ['id' => 'id_user003'];
+				case "user001":
+					return ['id' => 'id_user001'];
+				case "user002":
+					$response = $this->createMock(IResponse::class);
+					$response->method('getStatusCode')->willReturn(409);
+					$response->method('getBody')->willReturn('{"error": {"message": "Already exists"}}');
+					throw new ClientException('exception in client', 'createUser', $response);
+				case "user003":
+					return ['id' => 'id_user003'];
 			}
 		});
 		$this->ocisClientService->method('newOCISClient')->willReturn($client);
@@ -375,15 +375,15 @@ class StateMigrateUsersTest extends \Test\TestCase {
 		$client->method('createUser')->willReturnCallback(function ($admin, $token, IUser $user) {
 			// we only need to return the user id for now.
 			switch ($user->getUserName()) {
-			case "user001":
-				return ['id' => 'id_user001'];
-			case "user002":
-				$response = $this->createMock(IResponse::class);
-				$response->method('getStatusCode')->willReturn(500);
-				$response->method('getBody')->willReturn('{"error": {"message": "Something blew up"}}');
-				throw new ClientException('exception in client', 'createUser', $response);
-			case "user003":
-				return ['id' => 'id_user003'];
+				case "user001":
+					return ['id' => 'id_user001'];
+				case "user002":
+					$response = $this->createMock(IResponse::class);
+					$response->method('getStatusCode')->willReturn(500);
+					$response->method('getBody')->willReturn('{"error": {"message": "Something blew up"}}');
+					throw new ClientException('exception in client', 'createUser', $response);
+				case "user003":
+					return ['id' => 'id_user003'];
 			}
 		});
 		$this->ocisClientService->method('newOCISClient')->willReturn($client);

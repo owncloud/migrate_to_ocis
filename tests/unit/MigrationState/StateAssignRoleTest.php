@@ -81,12 +81,12 @@ class StateAssignRoleTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($adminUser, $token, $user) {
 				switch ($user->getUsername()) {
-				case "user001":
-					return "001oCISuser";
-				case "user002":
-					return "002oCISuser";
-				case "user003":
-					return "003oCISuser";
+					case "user001":
+						return "001oCISuser";
+					case "user002":
+						return "002oCISuser";
+					case "user003":
+						return "003oCISuser";
 				}
 			});
 
@@ -185,12 +185,12 @@ class StateAssignRoleTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($adminUser, $token, $user) {
 				switch ($user->getUsername()) {
-				case "user001":
-					return "001oCISuser";
-				case "user002":
-					return "002oCISuser";
-				case "user003":
-					return "003oCISuser";
+					case "user001":
+						return "001oCISuser";
+					case "user002":
+						return "002oCISuser";
+					case "user003":
+						return "003oCISuser";
 				}
 			});
 
@@ -257,12 +257,12 @@ class StateAssignRoleTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($adminUser, $token, $user) {
 				switch ($user->getUsername()) {
-				case "user001":
-					return "001oCISuser";
-				case "user002":
-					return null;
-				case "user003":
-					return "003oCISuser";
+					case "user001":
+						return "001oCISuser";
+					case "user002":
+						return null;
+					case "user003":
+						return "003oCISuser";
 				}
 			});
 
@@ -329,12 +329,12 @@ class StateAssignRoleTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($adminUser, $token, $user) {
 				switch ($user->getUsername()) {
-				case "user001":
-					return "001oCISuser";
-				case "user002":
-					return "002oCISuser";
-				case "user003":
-					return "003oCISuser";
+					case "user001":
+						return "001oCISuser";
+					case "user002":
+						return "002oCISuser";
+					case "user003":
+						return "003oCISuser";
 				}
 			});
 
@@ -404,12 +404,12 @@ class StateAssignRoleTest extends \Test\TestCase {
 			->method('getUser')
 			->willReturnCallback(function ($adminUser, $token, $user) {
 				switch ($user->getUsername()) {
-				case "user001":
-					return "001oCISuser";
-				case "user002":
-					return "002oCISuser";
-				case "user003":
-					return "003oCISuser";
+					case "user001":
+						return "001oCISuser";
+					case "user002":
+						return "002oCISuser";
+					case "user003":
+						return "003oCISuser";
 				}
 			});
 
