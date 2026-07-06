@@ -254,6 +254,8 @@ class UserGroupFinderTest extends \Test\TestCase {
 		$group = $this->createMock(IGroup::class);
 		$group->method('getDisplayName')->willReturn('group01');
 
+		$this->tempManager->method('getTempBaseDir')->willReturn('/tmp');
+
 		$this->userGroupFinder->addUserToCache($user, 'ocis_user_001');
 		$this->userGroupFinder->addGroupToCache($group, 'ocis_group_01');
 		$this->userGroupFinder->saveCache();
@@ -270,6 +272,8 @@ class UserGroupFinderTest extends \Test\TestCase {
 
 		$group = $this->createMock(IGroup::class);
 		$group->method('getDisplayName')->willReturn('group01');
+
+		$this->tempManager->method('getTempBaseDir')->willReturn('/tmp');
 
 		$this->userGroupFinder->addUserToCache($user, 'ocis_user_001');
 		$this->userGroupFinder->saveCache();
@@ -295,6 +299,8 @@ class UserGroupFinderTest extends \Test\TestCase {
 
 		$group = $this->createMock(IGroup::class);
 		$group->method('getDisplayName')->willReturn('group01');
+
+		$this->tempManager->method('getTempBaseDir')->willReturn('/tmp');
 
 		$this->userGroupFinder->addGroupToCache($group, 'ocis_group_01');
 		$this->userGroupFinder->saveCache();
@@ -322,6 +328,8 @@ class UserGroupFinderTest extends \Test\TestCase {
 
 		$group = $this->createMock(IGroup::class);
 		$group->method('getDisplayName')->willReturn('group01');
+
+		$this->tempManager->method('getTempBaseDir')->willReturn('/tmp');
 
 		$this->userGroupFinder->addUserToCache($user, 'ocis_user_001');
 		$this->userGroupFinder->addGroupToCache($group, 'ocis_group_01');
