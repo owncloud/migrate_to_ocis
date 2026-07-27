@@ -6,7 +6,6 @@ namespace OCA\MigrateToInfiniteScale\Tests\unit\Helper;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MariaDBPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Result;
@@ -81,6 +80,11 @@ class StorageTest extends \Test\TestCase {
 		self::assertSame(0, $storage->getUsedTotalSpace());
 	}
 
+	/**
+	 * ownCloud Classic 11 supports sqlite, mysql/mariadb and pgsql only - Oracle
+	 * was dropped from the installer and setup in owncloud/core#41555, so it
+	 * cannot be reached by this app any more and is not covered here.
+	 */
 	public function platformProvider(): array {
 		return [
 			// MySQL and MariaDB have no `||` string concatenation, so they must
@@ -89,7 +93,6 @@ class StorageTest extends \Test\TestCase {
 			'mariadb' => [new MariaDBPlatform(), true],
 			'postgres' => [new PostgreSQLPlatform(), false],
 			'sqlite' => [new SqlitePlatform(), false],
-			'oracle' => [new OraclePlatform(), false],
 		];
 	}
 
@@ -113,12 +116,12 @@ class StorageTest extends \Test\TestCase {
 	/**
 	 * @dataProvider platformProvider
 	 */
-	public function testSizeColumnIsQuotedForOracleOnly(AbstractPlatform $platform): void {
+	public function testSizeColumnIsNotQuoted(AbstractPlatform $platform): void {
 		$storage = new Storage($this->mockConnection($platform, ['totalSize' => '0']));
 		$storage->getUsedTotalSpace();
 
-		// `size` is a reserved word in oracle and needs oracle-style escaping
-		$expected = $platform instanceof OraclePlatform ? 'SUM(f."size")' : 'SUM(f.size)';
-		self::assertSame([$expected], $this->selects);
+		// the oracle-style quoting of the reserved `size` word applies to Oracle
+		// only, which oc11 no longer supports
+		self::assertSame(['SUM(f.size)'], $this->selects);
 	}
 }
