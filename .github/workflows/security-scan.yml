@@ -25,4 +25,4 @@ concurrency:
 jobs:
   trivy:
     name: Trivy
-    uses: owncloud/reusable-workflows/.github/workflows/build.yml@feat/trivy-reusable-workflow
+    uses: owncloud/reusable-workflows/.github/workflows/trivy.yml@test/trivy-validation-v035
