@@ -48,3 +48,19 @@ vulnerabilities:
     paths: ["bin/rclone_linux_amd64"]
     statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
     expired_at: 2026-11-01
+  # Not a stdlib finding: rclone v1.75.0 vendors golang.org/x/crypto v0.54.0 and
+  # the fix landed in v0.55.0. rclone master already carries v0.55.0, so this
+  # clears with the next rclone release rather than with a go toolchain bump -
+  # that is why it is listed apart from the eight entries above.
+  #
+  # Not reachable here: the flaw is in the SSH *server* handshake
+  # (ssh.NewServerConn / connection.serverAuthenticate), where a source-address
+  # restriction returned by a password, keyboard-interactive, no-client-auth or
+  # GSSAPI callback went unenforced. It needs an inbound SSH connection to an
+  # SSH server. This app never starts one: it shells out to `rclone sync` between
+  # two WebDAV remotes over HTTPS and to `rclone obscure`, and never uses the
+  # sftp backend or `rclone serve`.
+  - id: CVE-2026-56854 # golang.org/x/crypto/ssh: auth bypass via unenforced source-address restrictions
+    paths: ["bin/rclone_linux_amd64"]
+    statement: rclone v1.75.0 vendors x/crypto v0.54.0; fixed in v0.55.0, which is on rclone master but in no release yet. SSH server-side only, and this app never runs an SSH server.
+    expired_at: 2026-11-01
