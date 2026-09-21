@@ -1,0 +1,36 @@
+Security: Update the bundled rclone binary to upstream v1.75.1
+
+The app bundled upstream rclone v1.75.0, whose known HIGH findings were Go
+standard library ones plus one in golang.org/x/crypto, all accepted with an
+expiry date because no rclone release carried the fixes yet. Advisories
+published since then turned the scan red with six findings those acceptances
+did not cover. Four were in rclone itself: CVE-2026-88018 (a full SigV4
+signature bypass - `rclone serve s3 --auth-proxy` without `--auth-key`
+authenticates nobody) and CVE-2026-88044 (an `rclone rc` per-server auth-proxy
+bypass), both CRITICAL, plus CVE-2026-88017 (FTP cross-session auth-proxy
+confusion) and CVE-2026-88045 (S3 multipart memory exhaustion). The remaining
+two were not in rclone itself: CVE-2026-46603 (a golang.org/x/image/vp8l
+denial of service) and CVE-2026-84445 (a gRPC-Go denial of service).
+
+We've updated the binary to the official upstream release v1.75.1, which fixes
+all four rclone issues and vendors golang.org/x/image v0.45.0. Only the gRPC-Go
+finding is left, because v1.75.1 still pins the pseudo-version of
+google.golang.org/grpc that predates the fix. rclone master already carries the
+fixed one, so it clears with the next rclone release; until then it is accepted
+with an expiry date in .trivyignore.yaml, and it is not reachable here - the
+crash needs an inbound RPC to an xDS gRPC server, and this app only runs
+`rclone sync` between two WebDAV remotes and `rclone obscure`.
+
+Two further fixes in v1.75.1 land on the code path this app actually uses, even
+though neither reached the severity that failed the scan: CVE-2026-88046 stops
+source object names escaping the configured root on upload, and
+GHSA-3vxh-3pcx-9m8q confines names taken from a server's listing response to the
+directory that was listed.
+
+The update also retired the nine acceptances that file carried before. v1.75.1
+is built with go1.26.8, which closes the eight Go standard library findings
+accepted against v1.75.0's go1.26.5, and it vendors golang.org/x/crypto v0.56.0,
+which closes CVE-2026-56854.
+
+https://github.com/owncloud/migrate_to_ocis/issues/66
+https://github.com/owncloud/migrate_to_ocis/pull/67

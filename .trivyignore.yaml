@@ -4,63 +4,26 @@
 # finding again and the scan turns red - an accepted risk is meant to be
 # revisited, not buried. Verified: an expired entry does not suppress.
 vulnerabilities:
-  # bin/rclone_linux_amd64 is upstream rclone v1.75.0, the newest release
-  # (2026-07-31), built by upstream with go1.26.5. These eight stdlib findings
-  # are all fixed in go 1.25.13 / 1.26.6, which no rclone release has been built
-  # with yet - there is no rclone binary available today that does not report
-  # them. All are denial of service / XSS class, none CRITICAL, and none is
-  # reachable from how this app drives rclone: it shells out to `rclone sync`
-  # and `rclone obscure` against a single trusted ownCloud WebDAV endpoint, with
-  # no untrusted ASN.1, DNS, XML, HTML template or inbound HTTP/2 input.
+  # bin/rclone_linux_amd64 is upstream rclone v1.75.1, the newest release
+  # (2026-09-04), built by upstream with go1.26.8 and vendoring
+  # golang.org/x/crypto v0.56.0 and golang.org/x/image v0.45.0. That leaves this
+  # one finding: rclone v1.75.1 still pins google.golang.org/grpc at the
+  # v1.84.0-dev.0.20260723093437-b6eac429d7b6 pseudo-version, and the fix is in
+  # v1.85.0-dev.0.20260825072537-93e31b48545e. rclone master already carries that
+  # pseudo-version, so this clears with the next rclone release rather than with
+  # anything we can do here.
   #
-  # Drop these entries as soon as rclone publishes a release built with
-  # go >= 1.26.6. Scoped to the binary's path on purpose, so the acceptance
-  # cannot silently spread to other components.
-  - id: CVE-2026-33818 # encoding/asn1: DoS via excessive recursion in Unmarshal
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-39821 # golang.org/x/net/idna: privilege escalation via Punycode label processing
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-46600 # golang.org/x/net/dns/dnsmessage: DoS via invalid DNS record parsing
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-56853 # net/http: DoS on unencrypted HTTP/2 connections
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-56858 # html/template: XSS via pathological input
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-56859 # encoding/xml: DoS via decoding recursion depth
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-56860 # net/url: DoS from quadratic complexity in path handling
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  - id: CVE-2026-56862 # crypto/tls: DoS via indefinite KeyUpdate messages
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 is built with go1.26.5; fixed in go 1.25.13/1.26.6, no rclone release ships it yet.
-    expired_at: 2026-11-01
-  # Not a stdlib finding: rclone v1.75.0 vendors golang.org/x/crypto v0.54.0 and
-  # the fix landed in v0.55.0. rclone master already carries v0.55.0, so this
-  # clears with the next rclone release rather than with a go toolchain bump -
-  # that is why it is listed apart from the eight entries above.
+  # Not reachable here: the panic is in the xDS routing interceptor, which is
+  # installed only by servers constructed with xds.NewGRPCServer(), and is
+  # triggered by an inbound RPC carrying neither :authority nor Host. grpc is an
+  # indirect dependency of rclone's Google backends; this app never speaks gRPC
+  # at all, let alone serves it. It shells out to `rclone sync` between two
+  # WebDAV remotes (lib/MigrationState/StateMigrateFiles.php:173) and to
+  # `rclone obscure` (:255), and does not use `rclone serve` or the rc API.
   #
-  # Not reachable here: the flaw is in the SSH *server* handshake
-  # (ssh.NewServerConn / connection.serverAuthenticate), where a source-address
-  # restriction returned by a password, keyboard-interactive, no-client-auth or
-  # GSSAPI callback went unenforced. It needs an inbound SSH connection to an
-  # SSH server. This app never starts one: it shells out to `rclone sync` between
-  # two WebDAV remotes over HTTPS and to `rclone obscure`, and never uses the
-  # sftp backend or `rclone serve`.
-  - id: CVE-2026-56854 # golang.org/x/crypto/ssh: auth bypass via unenforced source-address restrictions
+  # Scoped to the binary's path on purpose, so the acceptance cannot silently
+  # spread to other components.
+  - id: CVE-2026-84445 # google.golang.org/grpc: DoS via a crafted RPC missing :authority and Host
     paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.0 vendors x/crypto v0.54.0; fixed in v0.55.0, which is on rclone master but in no release yet. SSH server-side only, and this app never runs an SSH server.
-    expired_at: 2026-11-01
+    statement: rclone v1.75.1 pins grpc v1.84.0-dev.0.20260723093437-b6eac429d7b6; fixed in v1.85.0-dev.0.20260825072537-93e31b48545e, which is on rclone master but in no release yet. Needs an xds.NewGRPCServer() gRPC server, and this app never speaks gRPC.
+    expired_at: 2026-12-01
