@@ -168,20 +168,7 @@ class StateMigrateFiles implements State {
 			$output->writeln("ocis connect: $ocis_connection", OutputInterface::VERBOSITY_VERBOSE);
 			$output->writeln("oc10 connect: $oc10_connection", OutputInterface::VERBOSITY_VERBOSE);
 
-			$cmd = [
-				self::$rclone_bin,
-				'sync',
-				$params['insecure'] ? '--no-check-certificate' : '',
-				'--create-empty-src-dirs',
-				'--ignore-case',
-				'--ignore-case-sync',
-				'--webdav-owncloud-exclude-shares=true',
-				'--webdav-owncloud-exclude-mounts=true',
-				'--config=',
-				'-v',
-				"$oc10_connection:/",
-				"$ocis_connection:/ownCloud",
-			];
+			$cmd = $this->buildRCloneSyncCommand((bool)$params['insecure'], $oc10_connection, $ocis_connection);
 			$verified = true;
 			// TODO: ProcessOutputLineProcessor should be injected
 			$lp = new ProcessOutputLineProcessor(function ($type, $line) use (&$verified, $user, $conflictLogFile, $params) {
@@ -211,6 +198,31 @@ class StateMigrateFiles implements State {
 			# cleanup app password
 			$this->tokenProvider->invalidateToken($password);
 		}
+	}
+
+	/**
+	 * Build the argument list for the rclone sync run.
+	 *
+	 * Symfony's Process turns every element into a discrete argument, so none of
+	 * them may be an empty string: rclone counts an empty argument as a third
+	 * positional one and refuses to sync.
+	 */
+	private function buildRCloneSyncCommand(bool $insecure, string $oc10_connection, string $ocis_connection): array {
+		$insecure_flags = $insecure ? ['--no-check-certificate'] : [];
+		return [
+			self::$rclone_bin,
+			'sync',
+			...$insecure_flags,
+			'--create-empty-src-dirs',
+			'--ignore-case',
+			'--ignore-case-sync',
+			'--webdav-owncloud-exclude-shares=true',
+			'--webdav-owncloud-exclude-mounts=true',
+			'--config=',
+			'-v',
+			"$oc10_connection:/",
+			"$ocis_connection:/ownCloud",
+		];
 	}
 
 	private function generateAppPassword(IUser $user): string {
