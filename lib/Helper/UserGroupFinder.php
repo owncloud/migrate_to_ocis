@@ -121,14 +121,14 @@ class UserGroupFinder {
 	 *
 	 * @param string $token oCIS admin's app password to make the
 	 * request to oCIS if needed
-	 * @param string $oc10UserId the ownCloud Classic user id
+	 * @param string $oc11UserId the ownCloud Classic user id
 	 * @return string|null the matched oCIS user id or null if the user
 	 * isn't found
 	 * @throws \OCA\MigrateToInfiniteScale\OCIS\ClientException if tries
 	 * to connect to oCIS and fails
 	 */
-	public function getUserById(string $admin_user, string $token, string $oc10UserId): ?string {
-		$user = $this->userManager->get($oc10UserId);
+	public function getUserById(string $admin_user, string $token, string $oc11UserId): ?string {
+		$user = $this->userManager->get($oc11UserId);
 		if ($user) {
 			return $this->getUser($admin_user, $token, $user);
 		}
@@ -142,14 +142,14 @@ class UserGroupFinder {
 	 *
 	 * @param string $token oCIS admin's app password to make the
 	 * request to oCIS if needed
-	 * @param string $oc10GroupId the ownCloud Classic group id
+	 * @param string $oc11GroupId the ownCloud Classic group id
 	 * @return string|null the matched oCIS group id or null if the group
 	 * isn't found
 	 * @throws \OCA\MigrateToInfiniteScale\OCIS\ClientException if tries
 	 * to connect to oCIS and fails
 	 */
-	public function getGroupById(string $admin_user, string $token, string $oc10GroupId) {
-		$group = $this->groupManager->get($oc10GroupId);
+	public function getGroupById(string $admin_user, string $token, string $oc11GroupId) {
+		$group = $this->groupManager->get($oc11GroupId);
 		if ($group) {
 			return $this->getGroup($admin_user, $token, $group);
 		}

@@ -77,21 +77,21 @@ class StateMigrateFilesTest extends \Test\TestCase {
 	}
 
 	public function testRCloneSyncCommandOmitsInsecureFlag(): void {
-		$cmd = self::invokePrivate($this->stateMigrateFiles, 'buildRCloneSyncCommand', [false, 'oc10', 'ocis']);
+		$cmd = self::invokePrivate($this->stateMigrateFiles, 'buildRCloneSyncCommand', [false, 'oc11', 'ocis']);
 
 		self::assertNotContains('', $cmd, 'an empty argument makes rclone read a third positional argument');
 		self::assertNotContains('--no-check-certificate', $cmd);
 		self::assertSame('sync', $cmd[1]);
-		self::assertSame('oc10:/', $cmd[\count($cmd) - 2]);
+		self::assertSame('oc11:/', $cmd[\count($cmd) - 2]);
 		self::assertSame('ocis:/ownCloud', $cmd[\count($cmd) - 1]);
 	}
 
 	public function testRCloneSyncCommandAddsInsecureFlag(): void {
-		$cmd = self::invokePrivate($this->stateMigrateFiles, 'buildRCloneSyncCommand', [true, 'oc10', 'ocis']);
+		$cmd = self::invokePrivate($this->stateMigrateFiles, 'buildRCloneSyncCommand', [true, 'oc11', 'ocis']);
 
 		self::assertNotContains('', $cmd, 'an empty argument makes rclone read a third positional argument');
 		self::assertSame('--no-check-certificate', $cmd[2]);
-		self::assertSame('oc10:/', $cmd[\count($cmd) - 2]);
+		self::assertSame('oc11:/', $cmd[\count($cmd) - 2]);
 		self::assertSame('ocis:/ownCloud', $cmd[\count($cmd) - 1]);
 	}
 }

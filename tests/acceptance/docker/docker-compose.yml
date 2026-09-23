@@ -26,18 +26,17 @@ services:
       retries: 60
     networks: [mignet]
 
-  # ownCloud Server 11 (the migration app requires oc11). The service keeps its
-  # historical `oc10` name so the rest of the harness/env wiring is unchanged.
-  oc10:
-    image: owncloud/server:${OC10_TAG:-11.0.0-rc2}
+  # ownCloud Classic Version 11 (the migration app requires oc11).
+  oc11:
+    image: owncloud/server:${OC11_TAG:-11.0.0}
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
-      OWNCLOUD_DOMAIN: oc10:8080
-      OWNCLOUD_TRUSTED_DOMAINS: oc10,localhost,127.0.0.1
+      OWNCLOUD_DOMAIN: oc11:8080
+      OWNCLOUD_TRUSTED_DOMAINS: oc11,localhost,127.0.0.1
       OWNCLOUD_DB_TYPE: mysql
       OWNCLOUD_DB_NAME: owncloud
       OWNCLOUD_DB_USERNAME: owncloud
