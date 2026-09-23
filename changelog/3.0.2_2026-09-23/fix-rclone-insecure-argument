@@ -4,9 +4,8 @@ The rclone argument list was built with a ternary that produced an empty string
 whenever the migration had not been initialised with `--insecure`. Symfony's
 Process hands every element of that list to the binary as a discrete argument,
 so rclone received an empty argument, counted it as a third positional one
-next to the two remotes, and refused to run:
-
-    Command sync needs 2 arguments maximum: you provided 3 non flag arguments
+next to the two remotes, and refused to run with `Command sync needs 2 arguments
+maximum: you provided 3 non flag arguments`.
 
 We've changed the argument list so that `--no-check-certificate` is only added
 when it actually applies. Migrating files against an oCIS with a trusted
