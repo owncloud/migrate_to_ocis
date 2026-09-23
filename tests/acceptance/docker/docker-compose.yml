@@ -28,7 +28,7 @@ services:
 
   # ownCloud Classic Version 11 (the migration app requires oc11).
   oc11:
-    image: owncloud/server:${OC11_TAG:-11.0.0-rc2}
+    image: owncloud/server:${OC11_TAG:-11.0.0}
     depends_on:
       db:
         condition: service_healthy
