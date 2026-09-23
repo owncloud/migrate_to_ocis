@@ -27,7 +27,8 @@ jobs:
     name: Trivy
     uses: owncloud/reusable-workflows/.github/workflows/trivy.yml@main
     with:
-      # This repo bundles a prebuilt rclone binary whose go stdlib findings are
-      # accepted with an expiry date; see .trivyignore.yaml. Named explicitly
-      # because Trivy only auto-discovers the plain .trivyignore format.
+      # This repo bundles a prebuilt rclone binary. Findings against it that no
+      # rclone release fixes yet are accepted with an expiry date; see
+      # .trivyignore.yaml for which ones and why. Named explicitly because Trivy
+      # only auto-discovers the plain .trivyignore format.
       trivyignores: .trivyignore.yaml

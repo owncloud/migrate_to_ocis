@@ -18,8 +18,9 @@ vulnerabilities:
   # triggered by an inbound RPC carrying neither :authority nor Host. grpc is an
   # indirect dependency of rclone's Google backends; this app never speaks gRPC
   # at all, let alone serves it. It shells out to `rclone sync` between two
-  # WebDAV remotes (lib/MigrationState/StateMigrateFiles.php:173) and to
-  # `rclone obscure` (:255), and does not use `rclone serve` or the rc API.
+  # WebDAV remotes (StateMigrateFiles::buildRCloneSyncCommand()) and to
+  # `rclone obscure` (StateMigrateFiles::RCloneObscure()), and does not use
+  # `rclone serve` or the rc API.
   #
   # Scoped to the binary's path on purpose, so the acceptance cannot silently
   # spread to other components.
