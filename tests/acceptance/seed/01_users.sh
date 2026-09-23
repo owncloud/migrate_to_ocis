@@ -17,7 +17,7 @@ user_exists() { occ user:list 2>/dev/null | grep -qE "^[[:space:]]*-[[:space:]]*
 # every enabled user to have a valid, unique email. Set one before seeding the
 # fixture users.
 log "setting admin email"
-occ user:modify "$OC10_ADMIN" email "admin@example.org" >/dev/null
+occ user:modify "$OC11_ADMIN" email "admin@example.org" >/dev/null
 
 # Read the CSV on FD 3: commands inside the loop use `docker compose exec -T`
 # which would otherwise consume the CSV from stdin after the first iteration.
@@ -28,7 +28,7 @@ while IFS=, read -r uid pw email enabled login <&3; do
     log "user $uid already exists"
   else
     log "creating user $uid ($email)"
-    docker compose exec -T -e OC_PASS="$pw" oc10 \
+    docker compose exec -T -e OC_PASS="$pw" oc11 \
       occ user:add --password-from-env --display-name "$uid" --email "$email" "$uid"
   fi
 
@@ -45,8 +45,8 @@ while IFS=, read -r uid pw email enabled login <&3; do
     occ user:enable "$uid" >/dev/null            # ensure enabled so login succeeds (also on re-runs)
     log "logging in user $uid (sets last_login)"
     # Authenticated DAV request triggers a login event -> last_login is set.
-    in_oc10 curl -sS -u "$uid:$pw" -X PROPFIND \
-      "$OC10_DAV/$uid/" -H 'Depth: 0' -o /dev/null
+    in_oc11 curl -sS -u "$uid:$pw" -X PROPFIND \
+      "$OC11_DAV/$uid/" -H 'Depth: 0' -o /dev/null
   fi
 
   if [ "$enabled" = "no" ]; then

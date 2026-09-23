@@ -5,11 +5,11 @@
 # Source common.sh before this file.
 
 # ownCloud Classic: occ runs and the instance reports installed.
-wait_oc10() {
+wait_oc11() {
   log "waiting for ownCloud Classic to be installed..."
-  retry 60 5 _oc10_installed
+  retry 60 5 _oc11_installed
 }
-_oc10_installed() {
+_oc11_installed() {
   occ status 2>/dev/null | grep -q 'installed: true'
 }
 

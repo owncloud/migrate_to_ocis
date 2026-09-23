@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Assertion helpers + oCIS Graph/WebDAV access. Source common.sh first.
 #
-# All oCIS calls run from inside the oc10 container (so `ocis` resolves) with -k
+# All oCIS calls run from inside the oc11 container (so `ocis` resolves) with -k
 # (self-signed cert). Per-user calls need an impersonation token minted by the
 # admin via /auth-app/tokens.
 

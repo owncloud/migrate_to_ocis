@@ -164,11 +164,11 @@ class StateMigrateFiles implements State {
 		$password = $this->generateAppPassword($user);
 		try {
 			$ocis_connection = $this->buildRCloneConnectionStringForOCIS($params['ocisHost'], $user->getUserName(), $user_token);
-			$oc10_connection = $this->buildRCloneConnectionStringForOC($user, $password);
+			$oc11_connection = $this->buildRCloneConnectionStringForOC($user, $password);
 			$output->writeln("ocis connect: $ocis_connection", OutputInterface::VERBOSITY_VERBOSE);
-			$output->writeln("oc10 connect: $oc10_connection", OutputInterface::VERBOSITY_VERBOSE);
+			$output->writeln("oc11 connect: $oc11_connection", OutputInterface::VERBOSITY_VERBOSE);
 
-			$cmd = $this->buildRCloneSyncCommand((bool)$params['insecure'], $oc10_connection, $ocis_connection);
+			$cmd = $this->buildRCloneSyncCommand((bool)$params['insecure'], $oc11_connection, $ocis_connection);
 			$verified = true;
 			// TODO: ProcessOutputLineProcessor should be injected
 			$lp = new ProcessOutputLineProcessor(function ($type, $line) use (&$verified, $user, $conflictLogFile, $params) {
@@ -207,7 +207,7 @@ class StateMigrateFiles implements State {
 	 * them may be an empty string: rclone counts an empty argument as a third
 	 * positional one and refuses to sync.
 	 */
-	private function buildRCloneSyncCommand(bool $insecure, string $oc10_connection, string $ocis_connection): array {
+	private function buildRCloneSyncCommand(bool $insecure, string $oc11_connection, string $ocis_connection): array {
 		$insecure_flags = $insecure ? ['--no-check-certificate'] : [];
 		return [
 			self::$rclone_bin,
@@ -220,7 +220,7 @@ class StateMigrateFiles implements State {
 			'--webdav-owncloud-exclude-mounts=true',
 			'--config=',
 			'-v',
-			"$oc10_connection:/",
+			"$oc11_connection:/",
 			"$ocis_connection:/ownCloud",
 		];
 	}

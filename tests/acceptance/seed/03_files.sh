@@ -16,14 +16,14 @@ MANIFEST="$ARTIFACTS/files_manifest.txt"
 # mkcol <user> <pw> <relpath>  -- create a collection (idempotent: 405 = exists)
 mkcol() {
   local u="$1" pw="$2" path="$3"
-  in_oc10 curl -sS -u "$u:$pw" -X MKCOL "$OC10_DAV/$u/$path" -o /dev/null \
+  in_oc11 curl -sS -u "$u:$pw" -X MKCOL "$OC11_DAV/$u/$path" -o /dev/null \
     -w '%{http_code}' | grep -qE '^(201|405)$'
 }
 
 # putfile <user> <pw> <relpath> <local-fixture>
 putfile() {
   local u="$1" pw="$2" path="$3" local="$4"
-  in_oc10 curl -sS -u "$u:$pw" -T - "$OC10_DAV/$u/$path" < "$local" -o /dev/null
+  in_oc11 curl -sS -u "$u:$pw" -T - "$OC11_DAV/$u/$path" < "$local" -o /dev/null
   local bytes
   bytes=$(wc -c < "$local" | tr -d ' ')
   printf '%s\t/%s\t%s\n' "$u" "$path" "$bytes" >> "$MANIFEST"

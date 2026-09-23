@@ -13,8 +13,8 @@ source lib/common.sh
 share_exists() {
   local owner="$1" pw="$2" path="$3" stype="$4" recipient="$5"
   local json
-  json=$(in_oc10 curl -sS -u "$owner:$pw" -H 'OCS-APIRequest: true' \
-    "$OC10_OCS?format=json&path=$path&reshares=true" 2>/dev/null || true)
+  json=$(in_oc11 curl -sS -u "$owner:$pw" -H 'OCS-APIRequest: true' \
+    "$OC11_OCS?format=json&path=$path&reshares=true" 2>/dev/null || true)
   [ -z "$json" ] && return 1
   echo "$json" | jq -e \
     --argjson st "$stype" --arg rc "$recipient" \
@@ -40,7 +40,7 @@ while IFS=, read -r owner pw path stype recipient perms expire password <&3; do
   [ -n "$expire" ]    && args+=(--data-urlencode "expireDate=$expire")
   [ -n "$password" ]  && args+=(--data-urlencode "password=$password")
 
-  resp=$(in_oc10 curl -sS -u "$owner:$pw" "${args[@]}" "$OC10_OCS?format=json")
+  resp=$(in_oc11 curl -sS -u "$owner:$pw" "${args[@]}" "$OC11_OCS?format=json")
   status=$(echo "$resp" | jq -r '.ocs.meta.statuscode // empty')
   if [ "$status" != "100" ] && [ "$status" != "200" ]; then
     err "share creation failed ($owner $path): $(echo "$resp" | jq -r '.ocs.meta.message // .')"

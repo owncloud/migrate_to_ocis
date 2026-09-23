@@ -51,7 +51,7 @@ if [ "$RUN_UP" = "1" ]; then
   log "starting containers"
   dc up -d --wait
 
-  wait_oc10
+  wait_oc11
   wait_ocis
   wait_ocis_authapp
 
@@ -59,7 +59,7 @@ if [ "$RUN_UP" = "1" ]; then
   # entrypoint's recursive chown failing on a read-only mount), fix ownership,
   # then enable it.
   log "installing migrate_to_ocis app into ownCloud Classic apps dir"
-  docker compose exec -T -u root oc10 bash -c '
+  docker compose exec -T -u root oc11 bash -c '
     set -e
     rm -rf /var/www/owncloud/apps/migrate_to_ocis
     cp -a /mnt/migrate_to_ocis /var/www/owncloud/apps/migrate_to_ocis
