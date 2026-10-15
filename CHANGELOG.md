@@ -1,10 +1,45 @@
 # Table of Contents
 
+* [Changelog for 3.0.3](#changelog-for-303-2026-10-15)
 * [Changelog for 3.0.2](#changelog-for-302-2026-09-23)
 * [Changelog for 3.0.1](#changelog-for-301-2026-08-20)
 * [Changelog for 3.0.0](#changelog-for-300-2026-07-27)
 * [Changelog for 2.0.1](#changelog-for-201-2026-07-24)
 * [Changelog for 2.0.0](#changelog-for-200-2026-07-02)
+
+# Changelog for [3.0.3] (2026-10-15)
+
+The following sections list the changes for 3.0.3.
+
+[3.0.3]: https://github.com/owncloud/migrate_to_ocis/compare/v3.0.2...v3.0.3
+
+## Summary
+
+* Security - Update the bundled rclone binary to upstream v1.75.2: [#74](https://github.com/owncloud/migrate_to_ocis/issues/74)
+
+## Details
+
+* Security - Update the bundled rclone binary to upstream v1.75.2: [#74](https://github.com/owncloud/migrate_to_ocis/issues/74)
+
+   The bundled rclone v1.75.1 is built with go1.26.8 and golang.org/x/net v0.57.0.
+   Go advisories published on 2026-10-08 turned the scan red with three new HIGH
+   findings against it: CVE-2026-78667 (Range header parsing in net/http's file
+   server), CVE-2026-97031 (ECH extension handling in a crypto/tls server) and
+   CVE-2026-78669 (an HTTP/2 SETTINGS flood that also affects clients). It also
+   still carried CVE-2026-84445, the gRPC-Go denial of service accepted with an
+   expiry date because no rclone release had the fix.
+
+   We've updated the binary to the official upstream release v1.75.2. It is built
+   with go1.26.9 and vendors golang.org/x/net v0.60.0 and the fixed
+   google.golang.org/grpc pseudo-version, which clears all four findings. That
+   leaves .trivyignore.yaml with no accepted vulnerabilities.
+
+   `rclone sync -v` output for the exact flag set this app passes, plain and with
+   --no-check-certificate, is identical between v1.75.1 and v1.75.2, so the
+   migration's log-level check is unaffected.
+
+   https://github.com/owncloud/migrate_to_ocis/issues/74
+   https://github.com/owncloud/migrate_to_ocis/pull/76
 
 # Changelog for [3.0.2] (2026-09-23)
 
