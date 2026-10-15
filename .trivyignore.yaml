@@ -3,28 +3,11 @@
 # Every entry MUST carry expired_at. Once the date passes Trivy reports the
 # finding again and the scan turns red - an accepted risk is meant to be
 # revisited, not buried. Verified: an expired entry does not suppress.
-vulnerabilities:
-  # bin/rclone_linux_amd64 is upstream rclone v1.75.1, the newest release
-  # (2026-09-04), built by upstream with go1.26.8 and vendoring
-  # golang.org/x/crypto v0.56.0 and golang.org/x/image v0.45.0. That leaves this
-  # one finding: rclone v1.75.1 still pins google.golang.org/grpc at the
-  # v1.84.0-dev.0.20260723093437-b6eac429d7b6 pseudo-version, and the fix is in
-  # v1.85.0-dev.0.20260825072537-93e31b48545e. rclone master already carries that
-  # pseudo-version, so this clears with the next rclone release rather than with
-  # anything we can do here.
-  #
-  # Not reachable here: the panic is in the xDS routing interceptor, which is
-  # installed only by servers constructed with xds.NewGRPCServer(), and is
-  # triggered by an inbound RPC carrying neither :authority nor Host. grpc is an
-  # indirect dependency of rclone's Google backends; this app never speaks gRPC
-  # at all, let alone serves it. It shells out to `rclone sync` between two
-  # WebDAV remotes (StateMigrateFiles::buildRCloneSyncCommand()) and to
-  # `rclone obscure` (StateMigrateFiles::RCloneObscure()), and does not use
-  # `rclone serve` or the rc API.
-  #
-  # Scoped to the binary's path on purpose, so the acceptance cannot silently
-  # spread to other components.
-  - id: CVE-2026-84445 # google.golang.org/grpc: DoS via a crafted RPC missing :authority and Host
-    paths: ["bin/rclone_linux_amd64"]
-    statement: rclone v1.75.1 pins grpc v1.84.0-dev.0.20260723093437-b6eac429d7b6; fixed in v1.85.0-dev.0.20260825072537-93e31b48545e, which is on rclone master but in no release yet. Needs an xds.NewGRPCServer() gRPC server, and this app never speaks gRPC.
-    expired_at: 2026-12-01
+#
+# bin/rclone_linux_amd64 is upstream rclone v1.75.2 (2026-10-09), built by
+# upstream with go1.26.9 and vendoring golang.org/x/net v0.60.0 and
+# google.golang.org/grpc v1.85.0-dev.0.20260825072537-93e31b48545e. It has no
+# known HIGH or CRITICAL finding, so nothing is accepted. Scope any future
+# entry for the binary with paths: ["bin/rclone_linux_amd64"], so the
+# acceptance cannot silently spread to other components.
+vulnerabilities: []
