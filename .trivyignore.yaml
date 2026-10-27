@@ -4,10 +4,28 @@
 # finding again and the scan turns red - an accepted risk is meant to be
 # revisited, not buried. Verified: an expired entry does not suppress.
 #
-# bin/rclone_linux_amd64 is upstream rclone v1.75.2 (2026-10-09), built by
-# upstream with go1.26.9 and vendoring golang.org/x/net v0.60.0 and
-# google.golang.org/grpc v1.85.0-dev.0.20260825072537-93e31b48545e. It has no
-# known HIGH or CRITICAL finding, so nothing is accepted. Scope any future
-# entry for the binary with paths: ["bin/rclone_linux_amd64"], so the
-# acceptance cannot silently spread to other components.
-vulnerabilities: []
+# Scope every entry for the bundled binary with paths: ["bin/rclone_linux_amd64"],
+# so the acceptance cannot silently spread to other components.
+vulnerabilities:
+  # bin/rclone_linux_amd64 is upstream rclone v1.75.2, the newest release
+  # (2026-10-09), built by upstream with go1.26.9. That leaves this one finding,
+  # in the go standard library: crypto/x509 still trusts the compromised eMudhra
+  # intermediate certificates. The fix is in go 1.26.10 / 1.27.3, and no rclone
+  # release is built with either yet. rclone v1.76, due around the end of
+  # October 2026, will be (rclone/rclone#10164). Rebuilding rclone ourselves is
+  # not an option: #56 deliberately moved to upstream builds.
+  #
+  # This one IS reachable. Every `rclone sync` this app runs
+  # (StateMigrateFiles::cloneFilesForUser) connects to the oCIS WebDAV endpoint
+  # over https and verifies its certificate through crypto/x509; the oC11
+  # endpoint too, when its absolute URL is https. An attacker in a
+  # man-in-the-middle position who holds a certificate chained through those
+  # intermediates could intercept the migration traffic. (With
+  # ocis_host_insecure set, rclone runs with --no-check-certificate and verifies
+  # neither remote at all - a weaker position than this CVE, not a way out of
+  # it.) It is accepted only because no fixed binary exists yet, and the expiry
+  # is kept short on purpose. Drop it with the bump to rclone v1.76.
+  - id: CVE-2026-111943 # crypto/x509: MITM via the compromised eMudhra intermediate certificates
+    paths: ["bin/rclone_linux_amd64"]
+    statement: rclone v1.75.2 is built with go1.26.9; fixed in go 1.26.10 / 1.27.3, which no rclone release uses yet (v1.76 will). Reachable over rclone's WebDAV TLS connections; accepted only until a fixed rclone exists.
+    expired_at: 2026-11-30
