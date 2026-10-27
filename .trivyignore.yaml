@@ -3,6 +3,9 @@
 # Every entry MUST carry expired_at. Once the date passes Trivy reports the
 # finding again and the scan turns red - an accepted risk is meant to be
 # revisited, not buried. Verified: an expired entry does not suppress.
+#
+# Scope every entry for the bundled binary with paths: ["bin/rclone_linux_amd64"],
+# so the acceptance cannot silently spread to other components.
 vulnerabilities:
   # bin/rclone_linux_amd64 is upstream rclone v1.75.2, the newest release
   # (2026-10-09), built by upstream with go1.26.9. That leaves this one finding,
@@ -13,16 +16,15 @@ vulnerabilities:
   # not an option: #56 deliberately moved to upstream builds.
   #
   # This one IS reachable. Every `rclone sync` this app runs
-  # (lib/MigrationState/StateMigrateFiles.php:171) makes TLS connections to the
-  # oC11 and oCIS WebDAV endpoints and verifies their certificates through
-  # crypto/x509, unless ocis_host_insecure is set. An attacker in a
+  # (StateMigrateFiles::cloneFilesForUser) connects to the oCIS WebDAV endpoint
+  # over https and verifies its certificate through crypto/x509; the oC11
+  # endpoint too, when its absolute URL is https. An attacker in a
   # man-in-the-middle position who holds a certificate chained through those
-  # intermediates could intercept the migration traffic. It is accepted only
-  # because no fixed binary exists yet, and the expiry is kept short on purpose.
-  # Drop it with the bump to rclone v1.76.
-  #
-  # Scoped to the binary's path on purpose, so the acceptance cannot silently
-  # spread to other components.
+  # intermediates could intercept the migration traffic. (With
+  # ocis_host_insecure set, rclone runs with --no-check-certificate and verifies
+  # neither remote at all - a weaker position than this CVE, not a way out of
+  # it.) It is accepted only because no fixed binary exists yet, and the expiry
+  # is kept short on purpose. Drop it with the bump to rclone v1.76.
   - id: CVE-2026-111943 # crypto/x509: MITM via the compromised eMudhra intermediate certificates
     paths: ["bin/rclone_linux_amd64"]
     statement: rclone v1.75.2 is built with go1.26.9; fixed in go 1.26.10 / 1.27.3, which no rclone release uses yet (v1.76 will). Reachable over rclone's WebDAV TLS connections; accepted only until a fixed rclone exists.
