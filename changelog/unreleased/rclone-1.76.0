@@ -1,0 +1,16 @@
+Security: Update the bundled rclone binary to upstream v1.76.0
+
+The bundled rclone v1.75.2 is built with go1.26.9 and golang.org/x/net
+v0.60.0, which the security scan reports as CVE-2026-111943 (go standard
+library) and CVE-2026-78661 (golang.org/x/net).
+
+We've updated the binary to the official upstream release v1.76.0. It is built
+with go1.27.3 and requires golang.org/x/net v0.62.0, which clears both. That
+leaves .trivyignore.yaml with no accepted vulnerabilities.
+
+`rclone sync -v` output for the exact flag set this app passes, plain and with
+--no-check-certificate, contains no NOTICE, WARNING or ERROR line with either
+version, so the migration's log-level check is unaffected.
+
+https://github.com/rclone/rclone/releases/tag/v1.76.0
+https://github.com/owncloud/migrate_to_ocis/pull/82
